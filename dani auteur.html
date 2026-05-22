@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dani Randria — Auteure</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Nunito+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --ink:    #1a1814;
+            --paper:  #F7F3EC;
+            --warm:   #E8E0D0;
+            --gold:   #C9A96E;
+            --muted:  #8A7F72;
+            --dark:   #0e0d0b;
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--paper);
+            color: var(--ink);
+            font-family: "Nunito Sans", sans-serif;
+            font-weight: 300;
+            overflow-x: hidden;
+        }
+
+        /* ── LOADER ── */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: var(--dark);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 24px;
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        #loader.done { opacity: 0; visibility: hidden; }
+
+        .loader-title {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 52px;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--paper);
+            letter-spacing: 0.06em;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 0.3s forwards;
+        }
+
+        .loader-rule {
+            width: 0px;
+            height: 1px;
+            background: var(--gold);
+            animation: ruleGrow 1s cubic-bezier(0.77,0,0.18,1) 0.6s forwards;
+        }
+
+        .loader-sub {
+            font-size: 11px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: rgba(247,243,236,0.25);
+            opacity: 0;
+            animation: fadeUp 0.6s ease 1s forwards;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes ruleGrow {
+            to { width: 120px; }
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 200;
+            padding: 28px 64px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.5s ease, padding 0.4s ease;
+        }
+
+        nav.scrolled {
+            background: rgba(247,243,236,0.95);
+            backdrop-filter: blur(10px);
+            padding: 18px 64px;
+            border-bottom: 1px solid rgba(26,24,20,0.07);
+        }
+
+        .nav-logo {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+            font-weight: 400;
+            font-style: italic;
+            color: var(--paper);
+            text-decoration: none;
+            transition: color 0.4s;
+        }
+
+        nav.scrolled .nav-logo { color: var(--ink); }
+
+        .nav-links {
+            display: flex;
+            gap: 44px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(247,243,236,0.6);
+            text-decoration: none;
+            transition: color 0.3s, opacity 0.3s;
+        }
+
+        nav.scrolled .nav-links a { color: var(--muted); }
+
+        .nav-links a:hover { color: var(--gold) !important; }
+
+        .nav-cta {
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: var(--ink) !important;
+            background: var(--gold);
+            padding: 10px 28px;
+            text-decoration: none;
+            transition: background 0.3s, color 0.3s !important;
+        }
+
+        .nav-cta:hover { background: var(--ink); color: var(--paper) !important; }
+
+        /* ── HERO ── */
+        #hero {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            inset: 0;
+            background: url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600&q=85') center/cover no-repeat;
+            transform: scale(1.06);
+            animation: heroScale 1.8s cubic-bezier(0.25,0.46,0.45,0.94) 1.5s forwards;
+            filter: brightness(0.35) saturate(0.6);
+        }
+
+        @keyframes heroScale {
+            to { transform: scale(1); }
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(
+                to top,
+                rgba(14,13,11,0.95) 0%,
+                rgba(14,13,11,0.3) 50%,
+                transparent 100%
+            );
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            padding: 0 10vw 100px;
+            max-width: 900px;
+        }
+
+        .hero-eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.4em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 28px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 2s forwards;
+        }
+
+        .hero-name {
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(64px, 9vw, 130px);
+            font-weight: 300;
+            color: var(--paper);
+            line-height: 0.92;
+            letter-spacing: -0.01em;
+            opacity: 0;
+            animation: fadeUp 0.9s ease 2.1s forwards;
+        }
+
+        .hero-name em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        .hero-tagline {
+            margin-top: 32px;
+            font-size: 19px;
+            font-weight: 200;
+            color: rgba(247,243,236,0.55);
+            line-height: 1.7;
+            max-width: 480px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 2.3s forwards;
+        }
+
+        .hero-actions {
+            margin-top: 48px;
+            display: flex;
+            gap: 20px;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 2.5s forwards;
+        }
+
+        .btn-primary {
+            padding: 16px 48px;
+            background: var(--gold);
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            font-weight: 400;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        .btn-primary:hover { background: var(--paper); }
+
+        .btn-ghost {
+            padding: 16px 48px;
+            border: 1px solid rgba(247,243,236,0.25);
+            color: rgba(247,243,236,0.7);
+            text-decoration: none;
+            font-size: 12px;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            transition: border-color 0.3s, color 0.3s;
+        }
+
+        .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+        .hero-scroll {
+            position: absolute;
+            bottom: 48px;
+            right: 64px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            z-index: 2;
+            opacity: 0;
+            animation: fadeUp 0.7s ease 2.8s forwards;
+        }
+
+        .hero-scroll span {
+            font-size: 10px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: rgba(247,243,236,0.25);
+            writing-mode: vertical-rl;
+        }
+
+        .scroll-line {
+            width: 1px;
+            height: 60px;
+            background: rgba(247,243,236,0.15);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .scroll-line::after {
+            content: '';
+            position: absolute;
+            top: -100%;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gold);
+            animation: scrollDrop 1.8s ease infinite;
+        }
+
+        @keyframes scrollDrop {
+            0%   { top: -100%; }
+            100% { top: 100%; }
+        }
+
+        /* ── REVEAL ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(48px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-left {
+            opacity: 0;
+            transform: translateX(-40px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal-left.visible { opacity: 1; transform: translateX(0); }
+
+        .reveal-right {
+            opacity: 0;
+            transform: translateX(40px);
+            transition: opacity 0.9s ease, transform 0.9s ease;
+        }
+
+        .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+        .d1 { transition-delay: 0.1s; }
+        .d2 { transition-delay: 0.25s; }
+        .d3 { transition-delay: 0.4s; }
+        .d4 { transition-delay: 0.55s; }
+
+        /* ── SECTION COMMONS ── */
+        .eyebrow {
+            font-size: 11px;
+            letter-spacing: 0.38em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 20px;
+        }
+
+        .s-title {
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(36px, 4vw, 62px);
+            font-weight: 300;
+            line-height: 1.1;
+            color: var(--ink);
+        }
+
+        .s-title em { font-style: italic; }
+
+        .s-text {
+            font-size: 17px;
+            font-weight: 300;
+            line-height: 1.85;
+            color: var(--muted);
+            max-width: 520px;
+        }
+
+        .rule {
+            width: 48px;
+            height: 1px;
+            background: var(--gold);
+            margin-bottom: 32px;
+        }
+
+        /* ── ABOUT ── */
+        #about {
+            background: var(--dark);
+            padding: 140px 10vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        .about-img {
+            position: relative;
+        }
+
+        .about-img img {
+            width: 100%;
+            aspect-ratio: 2/3;
+            object-fit: cover;
+            object-position: top;
+            display: block;
+            filter: grayscale(20%) brightness(0.85);
+        }
+
+        .about-img-frame {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            right: -24px;
+            bottom: -24px;
+            border: 1px solid rgba(201,169,110,0.2);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .about-quote {
+            position: absolute;
+            bottom: -28px;
+            right: -28px;
+            background: var(--gold);
+            padding: 28px 32px;
+            max-width: 260px;
+        }
+
+        .about-quote p {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 18px;
+            font-style: italic;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+
+        #about .s-title { color: var(--paper); }
+        #about .s-text  { color: rgba(247,243,236,0.5); }
+        #about .eyebrow { color: var(--gold); }
+
+        .about-facts {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .fact {
+            border-top: 1px solid rgba(201,169,110,0.2);
+            padding-top: 20px;
+        }
+
+        .fact-num {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 44px;
+            font-weight: 300;
+            color: var(--gold);
+            line-height: 1;
+            display: block;
+        }
+
+        .fact-label {
+            font-size: 12px;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: rgba(247,243,236,0.3);
+            display: block;
+            margin-top: 6px;
+        }
+
+        /* ── LIVRES ── */
+        #livres {
+            background: var(--paper);
+            padding: 140px 10vw;
+        }
+
+        .livres-header {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-between;
+            margin-bottom: 80px;
+        }
+
+        .livres-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+
+        .livre-card {
+            cursor: pointer;
+        }
+
+        .livre-cover {
+            position: relative;
+            overflow: hidden;
+            aspect-ratio: 2/3;
+            background: var(--warm);
+            margin-bottom: 24px;
+        }
+
+        .livre-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94),
+                        filter 0.5s ease;
+            filter: saturate(0.85);
+        }
+
+        .livre-card:hover .livre-cover img {
+            transform: scale(1.04);
+            filter: saturate(1);
+        }
+
+        .livre-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(14,13,11,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .livre-card:hover .livre-overlay { opacity: 1; }
+
+        .livre-overlay-text {
+            font-size: 12px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 4px;
+        }
+
+        .livre-genre {
+            font-size: 11px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        .livre-title {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 26px;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1.2;
+            margin-bottom: 8px;
+        }
+
+        .livre-year {
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* ── CITATION ── */
+        #citation {
+            background: var(--ink);
+            padding: 120px 10vw;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #citation::before {
+            content: '\201C';
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: "Cormorant Garamond", serif;
+            font-size: 400px;
+            color: rgba(201,169,110,0.04);
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .citation-text {
+            font-family: "Cormorant Garamond", serif;
+            font-size: clamp(28px, 3.5vw, 50px);
+            font-weight: 300;
+            font-style: italic;
+            color: var(--paper);
+            line-height: 1.45;
+            max-width: 860px;
+            margin: 0 auto 40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .citation-author {
+            font-size: 12px;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        /* ── ACTUALITES ── */
+        #actualites {
+            background: var(--warm);
+            padding: 140px 10vw;
+        }
+
+        .actu-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 2px;
+            margin-top: 72px;
+        }
+
+        .actu-card {
+            background: var(--paper);
+            overflow: hidden;
+            transition: transform 0.4s ease;
+        }
+
+        .actu-card:hover { transform: translateY(-6px); }
+
+        .actu-img {
+            aspect-ratio: 16/10;
+            overflow: hidden;
+        }
+
+        .actu-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            filter: saturate(0.7);
+            transition: transform 0.7s ease, filter 0.5s ease;
+        }
+
+        .actu-card:hover .actu-img img {
+            transform: scale(1.04);
+            filter: saturate(1);
+        }
+
+        .actu-body {
+            padding: 32px 28px;
+        }
+
+        .actu-date {
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 12px;
+        }
+
+        .actu-title {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+            font-weight: 400;
+            color: var(--ink);
+            line-height: 1.3;
+            margin-bottom: 12px;
+        }
+
+        .actu-excerpt {
+            font-size: 15px;
+            font-weight: 300;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .actu-link {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 12px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--ink);
+            text-decoration: none;
+            border-bottom: 1px solid var(--gold);
+            padding-bottom: 2px;
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .actu-link:hover { color: var(--gold); }
+
+        /* ── UNIVERS ── */
+        #univers {
+            background: var(--dark);
+            padding: 140px 10vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 100px;
+            align-items: center;
+        }
+
+        #univers .s-title { color: var(--paper); }
+        #univers .s-text  { color: rgba(247,243,236,0.5); }
+
+        .univers-img-stack {
+            position: relative;
+            height: 500px;
+        }
+
+        .univers-img-stack img {
+            position: absolute;
+            object-fit: cover;
+            filter: saturate(0.7);
+        }
+
+        .univers-img-stack img:nth-child(1) {
+            width: 65%;
+            height: 70%;
+            top: 0; left: 0;
+        }
+
+        .univers-img-stack img:nth-child(2) {
+            width: 55%;
+            height: 60%;
+            bottom: 0; right: 0;
+            border: 4px solid var(--dark);
+        }
+
+        .univers-themes {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin-top: 48px;
+        }
+
+        .theme-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px 0;
+            border-bottom: 1px solid rgba(247,243,236,0.06);
+            transition: gap 0.3s ease;
+            cursor: default;
+        }
+
+        .theme-row:first-child { border-top: 1px solid rgba(247,243,236,0.06); }
+        .theme-row:hover { gap: 28px; }
+
+        .theme-num {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 14px;
+            color: var(--gold);
+            opacity: 0.5;
+            width: 24px;
+            flex-shrink: 0;
+        }
+
+        .theme-name {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--paper);
+        }
+
+        /* ── NEWSLETTER ── */
+        #newsletter {
+            background: var(--gold);
+            padding: 100px 10vw;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        #newsletter .s-title { color: var(--ink); font-size: clamp(28px, 3vw, 48px); }
+        #newsletter .s-text  { color: rgba(26,24,20,0.65); }
+
+        .nl-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .nl-input {
+            background: rgba(26,24,20,0.08);
+            border: 1px solid rgba(26,24,20,0.15);
+            padding: 16px 24px;
+            font-size: 16px;
+            font-family: "Nunito Sans", sans-serif;
+            font-weight: 300;
+            color: var(--ink);
+            outline: none;
+            transition: border-color 0.3s;
+            width: 100%;
+        }
+
+        .nl-input::placeholder { color: rgba(26,24,20,0.4); }
+        .nl-input:focus { border-color: var(--ink); }
+
+        .nl-btn {
+            padding: 16px 48px;
+            background: var(--ink);
+            color: var(--paper);
+            border: none;
+            font-size: 12px;
+            font-family: "Nunito Sans", sans-serif;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: background 0.3s;
+            align-self: flex-start;
+        }
+
+        .nl-btn:hover { background: var(--dark); }
+
+        /* ── FOOTER ── */
+        footer {
+            background: var(--dark);
+            padding: 80px 10vw 48px;
+        }
+
+        .footer-top {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 64px;
+            padding-bottom: 64px;
+            border-bottom: 1px solid rgba(247,243,236,0.06);
+            margin-bottom: 40px;
+        }
+
+        .footer-brand {
+            font-family: "Cormorant Garamond", serif;
+            font-size: 32px;
+            font-weight: 300;
+            font-style: italic;
+            color: var(--paper);
+            display: block;
+            margin-bottom: 20px;
+            text-decoration: none;
+        }
+
+        .footer-tagline {
+            font-size: 14px;
+            font-weight: 300;
+            color: rgba(247,243,236,0.3);
+            line-height: 1.7;
+            max-width: 260px;
+        }
+
+        .footer-col-title {
+            font-size: 11px;
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            color: var(--gold);
+            display: block;
+            margin-bottom: 24px;
+        }
+
+        .footer-links {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .footer-links a {
+            font-size: 15px;
+            font-weight: 300;
+            color: rgba(247,243,236,0.4);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--gold); }
+
+        .footer-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .footer-copy {
+            font-size: 13px;
+            color: rgba(247,243,236,0.18);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 28px;
+        }
+
+        .footer-socials a {
+            font-size: 12px;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            color: rgba(247,243,236,0.25);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-socials a:hover { color: var(--gold); }
+
+        /* ── SCROLL TOP ── */
+        .scroll-top {
+            position: fixed;
+            bottom: 40px;
+            right: 48px;
+            width: 46px;
+            height: 46px;
+            background: var(--gold);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.3s, transform 0.3s, background 0.2s;
+            z-index: 100;
+        }
+
+        .scroll-top.visible { opacity: 1; transform: translateY(0); }
+        .scroll-top:hover { background: var(--ink); }
+
+        .scroll-top svg {
+            width: 16px;
+            height: 16px;
+            stroke: var(--ink);
+            transition: stroke 0.2s;
+        }
+
+        .scroll-top:hover svg { stroke: var(--paper); }
+    </style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+    <div class="loader-title">Dani Randria</div>
+    <div class="loader-rule"></div>
+    <div class="loader-sub">Auteure</div>
+</div>
+
+<!-- NAV -->
+<nav id="navbar">
+    <a href="#hero" class="nav-logo">Dani Randria</a>
+    <ul class="nav-links">
+        <li><a href="#about">L'auteure</a></li>
+        <li><a href="#livres">Livres</a></li>
+        <li><a href="#actualites">Actualités</a></li>
+        <li><a href="#univers">L'univers</a></li>
+        <li><a href="#newsletter" class="nav-cta">S'abonner</a></li>
+    </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <span class="hero-eyebrow">Auteure — Romans & Dark Fantasy</span>
+        <h1 class="hero-name">Dani<br><em>Randria</em></h1>
+        <p class="hero-tagline">Des mondes entre ombre et lumière, où les héros portent leurs cicatrices comme des armures.</p>
+        <div class="hero-actions">
+            <a href="#livres" class="btn-primary">Découvrir les livres</a>
+            <a href="#about" class="btn-ghost">L'auteure</a>
+        </div>
+    </div>
+    <div class="hero-scroll">
+        <div class="scroll-line"></div>
+        <span>Défiler</span>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+    <div class="about-img reveal-left">
+        <div class="about-img-frame"></div>
+        <img src="dani .png" alt="Dani Randria">
+        <div class="about-quote">
+            <p>Écrire, c'est donner une voix à ce qui ne peut pas encore se dire.</p>
+        </div>
+    </div>
+    <div class="about-text reveal-right">
+        <div class="rule"></div>
+        <span class="eyebrow">L'auteure</span>
+        <h2 class="s-title">Dani<br><em>Randria</em></h2>
+        <p class="s-text" style="margin-top: 24px;">
+            Née sous les hauts plateaux malgaches, Dani Randria grandit entre les récits oraux de sa grand-mère et les bibliothèques poussiéreuses de la ville. De ces deux mondes est née une voix singulière, quelque part entre la légende et le réel.
+        </p>
+        <p class="s-text" style="margin-top: 20px;">
+            Ses romans explorent la frontière entre la lumière et le chaos — des personnages fracturés qui apprennent, lentement, à tenir debout.
+        </p>
+        <div class="about-facts">
+            <div class="fact reveal d1">
+                <span class="fact-num">7</span>
+                <span class="fact-label">Romans publiés</span>
+            </div>
+            <div class="fact reveal d2">
+                <span class="fact-num">12</span>
+                <span class="fact-label">Pays traduits</span>
+            </div>
+            <div class="fact reveal d3">
+                <span class="fact-num">3</span>
+                <span class="fact-label">Prix littéraires</span>
+            </div>
+            <div class="fact reveal d4">
+                <span class="fact-num">180k</span>
+                <span class="fact-label">Lecteurs</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- LIVRES -->
+<section id="livres">
+    <div class="livres-header">
+        <div class="reveal">
+            <div class="rule"></div>
+            <span class="eyebrow">Bibliographie</span>
+            <h2 class="s-title">Les <em>livres</em></h2>
+        </div>
+        <p class="s-text reveal d2" style="text-align: right; max-width: 280px;">
+            Sept romans. Sept univers. Une seule obsession : raconter ce que l'on ne dit pas.
+        </p>
+    </div>
+    <div class="livres-grid">
+        <div class="livre-card reveal d1">
+            <div class="livre-cover">
+                <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=500&q=80" alt="Les Cendres du Crépuscule">
+                <div class="livre-overlay"><span class="livre-overlay-text">Lire la suite</span></div>
+            </div>
+            <span class="livre-genre">Dark Fantasy</span>
+            <div class="livre-title">Les Cendres du Crépuscule</div>
+            <div class="livre-year">2023 — Roman</div>
+        </div>
+        <div class="livre-card reveal d2">
+            <div class="livre-cover">
+                <img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=500&q=80" alt="L'Enfant des Marées">
+                <div class="livre-overlay"><span class="livre-overlay-text">Lire la suite</span></div>
+            </div>
+            <span class="livre-genre">Fantasy</span>
+            <div class="livre-title">L'Enfant des Marées</div>
+            <div class="livre-year">2021 — Roman</div>
+        </div>
+        <div class="livre-card reveal d3">
+            <div class="livre-cover">
+                <img src="https://images.unsplash.com/photo-1495640388908-05fa85288e61?w=500&q=80" alt="Quand les dieux se taisent">
+                <div class="livre-overlay"><span class="livre-overlay-text">Lire la suite</span></div>
+            </div>
+            <span class="livre-genre">Dark Fantasy</span>
+            <div class="livre-title">Quand les dieux se taisent</div>
+            <div class="livre-year">2019 — Roman</div>
+        </div>
+    </div>
+</section>
+
+<!-- CITATION -->
+<section id="citation">
+    <blockquote class="citation-text reveal">
+        Les monstres les plus redoutables ne vivent pas dans les forêts obscures. Ils savent sourire, et ils connaissent votre prénom.
+    </blockquote>
+    <span class="citation-author reveal d2">— Dani Randria, Les Cendres du Crépuscule</span>
+</section>
+
+<!-- ACTUALITES -->
+<section id="actualites">
+    <div class="reveal">
+        <div class="rule"></div>
+        <span class="eyebrow">Actualités</span>
+        <h2 class="s-title">À venir,<br><em>récemment</em></h2>
+    </div>
+    <div class="actu-grid">
+        <div class="actu-card reveal d1">
+            <div class="actu-img">
+                <img src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600&q=80" alt="Signature">
+            </div>
+            <div class="actu-body">
+                <span class="actu-date">14 Juin 2024</span>
+                <div class="actu-title">Séance de dédicaces — Antananarivo</div>
+                <p class="actu-excerpt">Retrouvez Dani Randria à la Librairie des Hauts Plateaux pour une rencontre exceptionnelle autour des Cendres du Crépuscule.</p>
+                <a href="#" class="actu-link">En savoir plus</a>
+            </div>
+        </div>
+        <div class="actu-card reveal d2">
+            <div class="actu-img">
+                <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&q=80" alt="Festival">
+            </div>
+            <div class="actu-body">
+                <span class="actu-date">2 Août 2024</span>
+                <div class="actu-title">Festival du Livre de Paris</div>
+                <p class="actu-excerpt">Une table ronde sur la fantasy africaine contemporaine, aux côtés de trois auteurs du continent.</p>
+                <a href="#" class="actu-link">En savoir plus</a>
+            </div>
+        </div>
+        <div class="actu-card reveal d3">
+            <div class="actu-img">
+                <img src="https://images.unsplash.com/photo-1455390582262-044cdead277a?w=600&q=80" alt="Écriture">
+            </div>
+            <div class="actu-body">
+                <span class="actu-date">Automne 2024</span>
+                <div class="actu-title">Nouveau roman en cours</div>
+                <p class="actu-excerpt">Dani Randria confirme l'arrivée d'un nouveau titre pour l'automne 2024. Les premières lignes promettent un récit plus intime et plus sombre que jamais.</p>
+                <a href="#" class="actu-link">En savoir plus</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- UNIVERS -->
+<section id="univers">
+    <div>
+        <div class="rule"></div>
+        <span class="eyebrow" style="color: var(--gold);">L'univers</span>
+        <h2 class="s-title reveal" style="color: var(--paper);">Des thèmes<br><em>qui traversent</em></h2>
+        <p class="s-text reveal d2">
+            Chaque roman de Dani Randria tisse les mêmes fils — identité, trahison, résilience — dans des décors toujours neufs. Un univers cohérent qui se construit livre après livre.
+        </p>
+        <div class="univers-themes reveal d3">
+            <div class="theme-row">
+                <span class="theme-num">01</span>
+                <span class="theme-name">Identité & Héritage</span>
+            </div>
+            <div class="theme-row">
+                <span class="theme-num">02</span>
+                <span class="theme-name">Mondes fracturés</span>
+            </div>
+            <div class="theme-row">
+                <span class="theme-num">03</span>
+                <span class="theme-name">La trahison comme moteur</span>
+            </div>
+            <div class="theme-row">
+                <span class="theme-num">04</span>
+                <span class="theme-name">Héros sans armure</span>
+            </div>
+            <div class="theme-row">
+                <span class="theme-num">05</span>
+                <span class="theme-name">Mythologies réinventées</span>
+            </div>
+        </div>
+    </div>
+    <div class="univers-img-stack reveal-right">
+        <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=600&q=80" alt="Univers 1">
+        <img src="https://images.unsplash.com/photo-1476275466078-4cdc02f3432a?w=500&q=80" alt="Univers 2">
+    </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section id="newsletter">
+    <div class="reveal">
+        <div class="rule" style="background: var(--ink); opacity: 0.3;"></div>
+        <span class="eyebrow" style="color: var(--ink); opacity: 0.6;">Rester connecté</span>
+        <h2 class="s-title">Ne manquez<br>rien</h2>
+        <p class="s-text" style="margin-top: 20px;">
+            Actualités, extraits inédits, dates de dédicaces — tout arrive en premier dans votre boîte.
+        </p>
+    </div>
+    <div class="nl-form reveal d2">
+        <input type="text" class="nl-input" placeholder="Votre prénom">
+        <input type="email" class="nl-input" placeholder="Votre adresse email">
+        <button class="nl-btn">S'abonner</button>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-top">
+        <div>
+            <a href="#hero" class="footer-brand">Dani Randria</a>
+            <p class="footer-tagline">Des mondes entre ombre et lumière. Auteure de fantasy et de dark fantasy depuis 2016.</p>
+        </div>
+        <div>
+            <span class="footer-col-title">Navigation</span>
+            <ul class="footer-links">
+                <li><a href="#about">L'auteure</a></li>
+                <li><a href="#livres">Livres</a></li>
+                <li><a href="#actualites">Actualités</a></li>
+                <li><a href="#univers">L'univers</a></li>
+            </ul>
+        </div>
+        <div>
+            <span class="footer-col-title">Livres</span>
+            <ul class="footer-links">
+                <li><a href="#">Les Cendres du Crépuscule</a></li>
+                <li><a href="#">L'Enfant des Marées</a></li>
+                <li><a href="#">Quand les dieux se taisent</a></li>
+                <li><a href="#">Tous les titres</a></li>
+            </ul>
+        </div>
+        <div>
+            <span class="footer-col-title">Contact</span>
+            <ul class="footer-links">
+                <li><a href="#">Presse</a></li>
+                <li><a href="#">Droits étrangers</a></li>
+                <li><a href="#">Événements</a></li>
+                <li><a href="#">Écrivez-moi</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <span class="footer-copy">2024 — Dani Randria. Tous droits réservés.</span>
+        <div class="footer-socials">
+            <a href="#">Instagram</a>
+            <a href="#">Facebook</a>
+            <a href="#">Goodreads</a>
+        </div>
+    </div>
+</footer>
+
+<!-- SCROLL TOP -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+</button>
+
+<script>
+    // LOADER
+    window.addEventListener('load', () => {
+        setTimeout(() => {
+            document.getElementById('loader').classList.add('done');
+        }, 1800);
+    });
+
+    // NAV
+    const navbar = document.getElementById('navbar');
+    const scrollTopBtn = document.getElementById('scrollTop');
+
+    window.addEventListener('scroll', () => {
+        const y = window.scrollY;
+        navbar.classList.toggle('scrolled', y > 80);
+        scrollTopBtn.classList.toggle('visible', y > 500);
+    });
+
+    // SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
